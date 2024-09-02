@@ -5,11 +5,12 @@ exports.create = (req, res) => {
     let departamento = {};
 
     try {
+        departamento.iddepartamento = req.body.iddepartamento;
         departamento.descripcion = req.body.descripcion;
 
         Departamento.create(departamento).then(result => {
             res.status(200).json({
-                message: "Departamento creado exitosamente con id = " + result.id_departamento,
+                message: "Departamento creado exitosamente con id = " + result.iddepartamento,
                 departamento: result,
             });
         });
@@ -39,7 +40,7 @@ exports.retrieveAllDepartamentos = (req, res) => {
 };
 
 exports.getDepartamentoById = (req, res) => {
-    let departamentoId = req.params.id_departamento;
+    let departamentoId = req.params.iddepartamento; // Cambiado de id_departamento a iddepartamento
     Departamento.findByPk(departamentoId)
         .then(departamento => {
             res.status(200).json({
@@ -58,7 +59,7 @@ exports.getDepartamentoById = (req, res) => {
 
 exports.updateById = async (req, res) => {
     try {
-        let departamentoId = req.params.id_departamento;
+        let departamentoId = req.params.iddepartamento; // Cambiado de id_departamento a iddepartamento
         let departamento = await Departamento.findByPk(departamentoId);
     
         if (!departamento) {
@@ -71,11 +72,11 @@ exports.updateById = async (req, res) => {
             let updatedObject = {
                 descripcion: req.body.descripcion
             };
-            let result = await Departamento.update(updatedObject, {returning: true, where: {id_departamento: departamentoId}});
+            let result = await Departamento.update(updatedObject, {returning: true, where: {iddepartamento: departamentoId}}); // Cambiado de id_departamento a iddepartamento
             
-            if (!result) {
+            if (!result[0]) { // Ajuste aquí: result es un array con el número de filas actualizadas
                 res.status(500).json({
-                    message: "No se puede actualizar el departamento con id = " + req.params.id_departamento,
+                    message: "No se puede actualizar el departamento con id = " + req.params.iddepartamento,
                     error: "No se pudo actualizar el departamento",
                 });
             }
@@ -87,7 +88,7 @@ exports.updateById = async (req, res) => {
         }
     } catch (error) {
         res.status(500).json({
-            message: "No se puede actualizar el departamento con id = " + req.params.id_departamento,
+            message: "No se puede actualizar el departamento con id = " + req.params.iddepartamento,
             error: error.message
         });
     }
@@ -95,7 +96,7 @@ exports.updateById = async (req, res) => {
 
 exports.deleteById = async (req, res) => {
     try {
-        let departamentoId = req.params.id_departamento;
+        let departamentoId = req.params.iddepartamento; // Cambiado de id_departamento a iddepartamento
         let departamento = await Departamento.findByPk(departamentoId);
 
         if (!departamento) {
@@ -112,7 +113,7 @@ exports.deleteById = async (req, res) => {
         }
     } catch (error) {
         res.status(500).json({
-            message: "No se puede eliminar el departamento con id = " + req.params.id_departamento,
+            message: "No se puede eliminar el departamento con id = " + req.params.iddepartamento, // Cambiado de id_departamento a iddepartamento
             error: error.message,
         });
     }

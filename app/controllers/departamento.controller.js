@@ -1,5 +1,5 @@
 const db = require('../config/db.config.js');
-const Departamento = db.Departamento; // Asegúrate de que el nombre sea correcto
+const Departamento = db.Departamento; 
 
 exports.create = (req, res) => {
     let departamento = {};

@@ -1,5 +1,5 @@
 const db = require('../config/db.config.js');
-const Producto = db.Producto; // Asegúrate de que el nombre sea correcto
+const Producto = db.Producto; 
 
 exports.create = (req, res) => {
     let producto = {};

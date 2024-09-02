@@ -1,5 +1,5 @@
 const db = require('../config/db.config.js');
-const Factura = db.Factura; // Asegúrate de que el nombre sea correcto
+const Factura = db.Factura; 
 
 exports.create = async (req, res) => {
     let factura = {};

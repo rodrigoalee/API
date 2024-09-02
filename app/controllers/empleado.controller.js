@@ -6,7 +6,7 @@ exports.create = (req, res) => {
     let empleado = {};
 
     try {
-        // Asignar valores del cuerpo de la solicitud al objeto empleado
+       
         empleado.primernombre = req.body.primernombre;
         empleado.segundonombre = req.body.segundonombre;
         empleado.primerapellido = req.body.primerapellido;
@@ -16,7 +16,7 @@ exports.create = (req, res) => {
         empleado.estatus = req.body.estatus;
         empleado.iddepartamento = req.body.iddepartamento;
 
-        // Guardar el empleado en la base de datos
+        
         Empleado.create(empleado).then(result => {
             res.status(200).json({
                 message: "Empleado creado exitosamente con id = " + result.id_empleado,
@@ -31,7 +31,7 @@ exports.create = (req, res) => {
     }
 };
 
-// Recuperar todos los empleados
+
 exports.retrieveAllEmpleados = (req, res) => {
     Empleado.findAll()
         .then(empleadoInfos => {
@@ -49,7 +49,7 @@ exports.retrieveAllEmpleados = (req, res) => {
         });
 };
 
-// Recuperar un empleado por ID
+
 exports.getEmpleadoById = (req, res) => {
     let empleadoId = req.params.id;
     Empleado.findByPk(empleadoId)
@@ -68,7 +68,7 @@ exports.getEmpleadoById = (req, res) => {
         });
 };
 
-// Actualizar un empleado por ID
+
 exports.updateById = async (req, res) => {
     try {
         let empleadoId = req.params.id;
@@ -114,7 +114,7 @@ exports.updateById = async (req, res) => {
     }
 };
 
-// Eliminar un empleado por ID
+
 exports.deleteById = async (req, res) => {
     try {
         let empleadoId = req.params.id;

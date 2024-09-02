@@ -16,14 +16,14 @@ module.exports = (sequelize, Sequelize) => {
         id_cliente: {
             type: Sequelize.INTEGER,
             references: {
-                model: 'clientes',  // Asegúrate de que este nombre coincida con el nombre de la tabla en la base de datos
+                model: 'clientes',  
                 key: 'id_cliente'
             }
         },
         id_empleado: {
             type: Sequelize.INTEGER,
             references: {
-                model: 'empleados',  // Asegúrate de que este nombre coincida con el nombre de la tabla en la base de datos
+                model: 'empleados',  
                 key: 'id_empleado'
             }
         }

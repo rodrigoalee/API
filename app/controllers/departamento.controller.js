@@ -1,115 +1,119 @@
 const db = require('../config/db.config.js');
-const Departamento = db.Departamento;
+const Departamento = db.Departamento; // Asegúrate de que el nombre sea correcto
 
-// Crear un nuevo departamento
 exports.create = (req, res) => {
-    let departamento = {
-        iddepartamento: req.body.iddepartamento,
-        descripcion: req.body.descripcion
-    };
+    let departamento = {};
 
-    Departamento.create(departamento)
-        .then(result => {
-            res.status(201).json({
-                message: "Departamento creado exitosamente con id = " + result.iddepartamento,
+    try {
+        departamento.descripcion = req.body.descripcion;
+
+        Departamento.create(departamento).then(result => {
+            res.status(200).json({
+                message: "Departamento creado exitosamente con id = " + result.id_departamento,
                 departamento: result,
             });
-        })
-        .catch(error => {
-            res.status(500).json({
-                message: "Error al crear el departamento",
-                error: error.message
-            });
         });
-};
-
-// Recuperar todos los departamentos
-exports.retrieveAllDepartamentos = (req, res) => {
-    Departamento.findAll()
-        .then(departamentos => {
-            res.status(200).json({
-                message: "Información de los Departamentos obtenida exitosamente",
-                departamentos: departamentos
-            });
-        })
-        .catch(error => {
-            res.status(500).json({
-                message: "Error al obtener los departamentos",
-                error: error.message
-            });
-        });
-};
-
-// Recuperar un departamento por ID
-exports.getDepartamentoById = (req, res) => {
-    let departamentoId = req.params.id;
-    Departamento.findByPk(departamentoId)
-        .then(departamento => {
-            if (!departamento) {
-                return res.status(404).json({
-                    message: "No se encontró el Departamento con id = " + departamentoId
-                });
-            }
-            res.status(200).json({
-                message: "Departamento obtenido exitosamente",
-                departamento: departamento
-            });
-        })
-        .catch(error => {
-            res.status(500).json({
-                message: "Error al obtener el departamento",
-                error: error.message
-            });
-        });
-};
-
-// Actualizar un departamento por ID
-exports.updateById = async (req, res) => {
-    const departamentoId = req.params.id;
-    try {
-        const [updated] = await Departamento.update(req.body, {
-            where: { iddepartamento: departamentoId }
-        });
-        if (updated) {
-            const updatedDepartamento = await Departamento.findByPk(departamentoId);
-            res.status(200).json({
-                message: "Departamento actualizado exitosamente",
-                departamento: updatedDepartamento,
-            });
-        } else {
-            res.status(404).json({
-                message: "No se encontró el Departamento con id = " + departamentoId
-            });
-        }
     } catch (error) {
         res.status(500).json({
-            message: "Error al actualizar el departamento",
+            message: "¡Fallo al crear el departamento!",
             error: error.message
         });
     }
 };
 
-// Eliminar un departamento por ID
-exports.deleteById = async (req, res) => {
-    const departamentoId = req.params.id;
-    try {
-        const deleted = await Departamento.destroy({
-            where: { iddepartamento: departamentoId }
-        });
-        if (deleted) {
+exports.retrieveAllDepartamentos = (req, res) => {
+    Departamento.findAll()
+        .then(departamentoInfos => {
             res.status(200).json({
-                message: "Departamento eliminado exitosamente",
-                id: departamentoId
+                message: "¡Departamentos obtenidos exitosamente!",
+                departamentos: departamentoInfos
             });
-        } else {
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(500).json({
+                message: "¡Error al obtener los departamentos!",
+                error: error
+            });
+        });
+};
+
+exports.getDepartamentoById = (req, res) => {
+    let departamentoId = req.params.id_departamento;
+    Departamento.findByPk(departamentoId)
+        .then(departamento => {
+            res.status(200).json({
+                message: "Departamento obtenido exitosamente con id = " + departamentoId,
+                departamento: departamento
+            });
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(500).json({
+                message: "¡Error al obtener departamento con id!",
+                error: error
+            });
+        });
+};
+
+exports.updateById = async (req, res) => {
+    try {
+        let departamentoId = req.params.id_departamento;
+        let departamento = await Departamento.findByPk(departamentoId);
+    
+        if (!departamento) {
             res.status(404).json({
-                message: "No se encontró el Departamento con id = " + departamentoId
+                message: "No se encontró el departamento para actualizar con id = " + departamentoId,
+                departamento: "",
+                error: "404"
+            });
+        } else {    
+            let updatedObject = {
+                descripcion: req.body.descripcion
+            };
+            let result = await Departamento.update(updatedObject, {returning: true, where: {id_departamento: departamentoId}});
+            
+            if (!result) {
+                res.status(500).json({
+                    message: "No se puede actualizar el departamento con id = " + req.params.id_departamento,
+                    error: "No se pudo actualizar el departamento",
+                });
+            }
+
+            res.status(200).json({
+                message: "Actualización exitosa del departamento con id = " + departamentoId,
+                departamento: updatedObject,
             });
         }
     } catch (error) {
         res.status(500).json({
-            message: "Error al eliminar el departamento",
+            message: "No se puede actualizar el departamento con id = " + req.params.id_departamento,
             error: error.message
+        });
+    }
+};
+
+exports.deleteById = async (req, res) => {
+    try {
+        let departamentoId = req.params.id_departamento;
+        let departamento = await Departamento.findByPk(departamentoId);
+
+        if (!departamento) {
+            res.status(404).json({
+                message: "No existe el departamento con id = " + departamentoId,
+                error: "404",
+            });
+        } else {
+            await departamento.destroy();
+            res.status(200).json({
+                message: "Eliminación exitosa del departamento con id = " + departamentoId,
+                departamento: departamento,
+            });
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: "No se puede eliminar el departamento con id = " + req.params.id_departamento,
+            error: error.message,
         });
     }
 };

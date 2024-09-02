@@ -1,9 +1,12 @@
 module.exports = (sequelize, Sequelize) => {
     const Departamento = sequelize.define('departamento', {
-        iddepartamento: {
-            type: Sequelize.INTEGER, autoincrement: true, primaryKey: true},
+        id_departamento: {
+            type: Sequelize.INTEGER,
+            primaryKey: true
+        },
         descripcion: {
-            type: Sequelize.STRING}
+            type: Sequelize.STRING
+        }
     });
 
     return Departamento;

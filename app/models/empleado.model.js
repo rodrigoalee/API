@@ -16,6 +16,13 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.INTEGER},
         estatus: {
             type: Sequelize.INTEGER},
+        iddepartamento: {
+            type: Sequelize.INTEGER,
+            references: {
+                model: 'departamentos', 
+                key: 'iddepartamento'
+            }
+        }
     });
 
     return Empleado;

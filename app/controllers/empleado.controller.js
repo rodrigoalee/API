@@ -14,6 +14,7 @@ exports.create = (req, res) => {
         empleado.nit = req.body.nit;
         empleado.salario = req.body.salario;
         empleado.estatus = req.body.estatus;
+        empleado.iddepartamento = req.body.iddepartamento;
 
         // Guardar el empleado en la base de datos
         Empleado.create(empleado).then(result => {
